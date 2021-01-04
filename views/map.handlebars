@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Response Map - Northsea</title>
+    <meta name="description" content="Login page for Northsea Survyes">
+    <meta name="author" content="Daniel Perks">
+    <link href="{{host}}/reset.css" type="text/css" rel="stylesheet" />
+    <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap" rel="stylesheet">
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0Gd7eLG_-vSxbOEuLOVIqj5v1BCBn1Gc&callback=initMap&libraries=&v=weekly"
+        defer></script>
+</head>
+
+<body>
+    <nav class="topnav">
+        <a href="/"><img src="{{host}}/images/logowide.png" class="logotop" alt="Northsea Surveys Logo"></a>
+        <div style="float: left; padding-top: 10px">
+            You are viewing:<br />
+            <b>{{testName}}</b>
+        </div>
+        {{#if authorised}}
+            <a href="/logout" class="typcn typcn-key" style="line-height: 45px; float:right; font-size: 30px;"></a>
+            <img src="{{host}}/images/placeholder.png" class="usericontop" alt="User icon">
+            <div style="float: right; text-align: right; padding-right: 1vw; line-height: 25px">
+                <b>{{name}}</b><br />
+                <a>{{username}}</a>
+            </div>
+        {{else}}
+            <div style="float: right; text-align: right; padding-right: 1vw; line-height: 25px">
+                <a href="/login"><b>Log In</b></a><br />
+                <a href="/register">Register</a>
+            </div>
+        {{/if}}
+    </nav>
+
+    {{#if msg}}
+        <div class="msgbox">{{msg}}</div>
+    {{/if}}
+    <main class="mapbox">
+        <div id="map"></div>
+    </main>
+    <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 3,
+                center: { lat: 20, lng: 0 },
+                zoomControl: false,
+            })
+
+            {{#each responselocation}}
+                const marker{{@index}} = new google.maps.Marker({ position: { lat: {{lat}}, lng: {{lon}} }, map: map,})
+            {{/each}}
+            }
+    </script>
+</body>
+
+</html>
