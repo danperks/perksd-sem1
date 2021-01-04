@@ -1,0 +1,79 @@
+name: Northsea Actions
+
+on:
+  push:
+    branches: 
+      - master
+      - database
+      - frontend
+      - server
+  pull_request:
+    branches: 
+      - master
+      - database
+      - frontend
+      - server
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Linter
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install eslint
+        run: npm install eslint
+      - name: Run eslint
+        run: ./node_modules/.bin/eslint .
+
+  jsdoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: JSDoc
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install jsdoc
+        run: npm install jsdoc
+      - name: Run jsdoc
+        run: ./node_modules/.bin/jsdoc . -d docs/jsdocs/
+
+  ava:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Ava Test
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install Testing Tools
+        run: npm install
+      - name: Run Test Suite
+        run: npm test
+
+  ava:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Ava Test
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install Testing Tools
+        run: npm install
+      - name: Run Test Suite
+        run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.8.8
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "perksd-sem1"
+          heroku_email: "danielperks14@gmail.com"
+          usedocker: true
