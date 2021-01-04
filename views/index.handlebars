@@ -1,34 +1,109 @@
-
 <!doctype html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Home Page</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
-		<script type="module" src="main.js"></script>
-	</head>
-	<body>
-		<header>
-			<h1>Home</h1>
-			{{#if authorised}}
-				<a href="/logout">Log out</a>
-			{{else}}
-				<a href="/login">Log in</a>
-			{{/if}}
-		</header>
-		{{#if msg}}
- 			<aside>
-				<p class="msg">{{msg}}</p>
-			</aside>
-		{{/if}}
-	<main>
-		<p>This is the home page. Users can see it without logging in.</p>
+
+<head>
+	<meta charset="utf-8">
+	<title>Home - Northsea</title>
+	<meta name="description" content="Home page for Northsea Survyes">
+	<meta name="author" content="Daniel Perks">
+	<link href="{{host}}/reset.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap" rel="stylesheet">
+	<script type="application/javascript" src="{{host}}/survey.js"></script>
+</head>
+
+<body>
+	<nav class="topnav">
+		<a href="/"><img src="{{host}}/images/logowide.png" class="logotop" alt="Northsea Surveys Logo"></a>
 		{{#if authorised}}
-			<p><a href="/secure">secure page</a></p>
+			<a href="/logout" class="typcn typcn-key" style="line-height: 45px; float:right; font-size: 30px;"></a>
+			<img src="{{host}}/images/placeholder.png" class="usericontop" alt="User icon">
+			<div style="float: right; text-align: right; padding-right: 1vw; line-height: 25px">
+				<b>{{name}}</b><br />
+				<a>{{username}}</a>
+			</div>
+		{{else}}
+			<div style="float: right; text-align: right; padding-right: 1vw; line-height: 25px">
+				<a href="/login"><b>Log In</b></a><br />
+				<a href="/register">Register</a>
+			</div>
 		{{/if}}
+	</nav>
+	{{#if msg}}
+		<div class="msgbox">{{msg}}</div>
+	{{/if}}
+	<main class="content" style="width: 100%; height: calc(98vh - 50px);">
+		<table style="width: 100%; height: 100%;">
+			<thead>
+				<tr>
+					<th class="searchpad"></th>
+					<th class="searchbox">
+						<div class="searchwrap">
+							<div class="search">
+								<input type="text" onkeyup="searchFilter()" id="searchBox" class="searchTerm"
+									placeholder="What are you looking for?">
+								</button>
+							</div>
+						</div>
+					<th class="searchpad"></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td>
+						<div class="grid">
+							{{#each surveys}}
+								<div class="gridelem">
+									<a class="typcn typcn-{{icon}} surveyicon" {{#if ../isadmin}}
+										style="padding-left: 1.4vw" {{/if}}></a>
+									{{#if ../isadmin}}
+										<a class="adminmenu typcn typcn-equals"></a>
+									{{/if}}
+									<div class="card-data">
+										<h2>{{name}}</h2>
+										<h4>Open: {{open}}
+											<h4>
+												<h4>Close: {{close}}
+													<h4>
+														<h4>Status: {{statustxt}}
+															<h4>
+									</div>
+									<div class="card-actions-box">
+										<div class="card-action"><a href="/results/{{surveyid}}"
+												class="typcn typcn-chart-line"></a></div>
+										<div class="card-action"><a href="/map/{{surveyid}}"
+												class="typcn typcn-location"></a>
+										</div>
+										<div class="card-action-spacer"></div>
+										{{#if status}}
+											<div class="card-action"><a href="/survey/{{surveyid}}"
+													class="typcn typcn-chevron-right"></a>
+											</div>
+										{{else}}
+											<div class="card-action major-action"><a href="/survey/{{surveyid}}"
+													class="typcn typcn-chevron-right"></a>
+											</div>
+										{{/if}}
+									</div>
+									<h4>Completions: {{completions}}
+										<h4>
+								</div>
+							{{/each}}
+						</div>
+					</td>
+					<td></td>
+				</tr>
+				<tr style="height: 20%">
+					<td style="height: 20%"></td>
+					<td></td>
+					<td></td>
+				</tr>
 	</main>
-	</body>
+</body>
+
 </html>
