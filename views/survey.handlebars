@@ -1,0 +1,196 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{{testName}} - Northsea</title>
+    <meta name="description" content="Survey page for Northsea survey">
+    <meta name="author" content="Daniel Perks">
+    <link href="{{host}}/reset.css" type="text/css" rel="stylesheet" />
+    <link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap" rel="stylesheet">
+    <script type="application/javascript" src="{{host}}/survey.js"></script>
+</head>
+
+<body style="overflow: hidden;">
+    <nav class="sidenav">
+        <div style="height: 10vh">
+            <a href="/"><img src="{{host}}/images/logowide.png" class="logoleft" alt="Northsea Surveys Logo"></a>
+        </div>
+        <div style="height: 25vh;">
+            <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <!-- change dasharray for percentage -->
+                <path id="percircle" class="circle" stroke-dasharray="0, 100"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.35" class="percentage" id="percentage">0%</text>
+                <text x="18" y="25" class="currentquest" id="curquesttxt">0/0</text>
+            </svg>
+        </div>
+        <ul class="questlist">
+            {{#each questions}}
+                <li>
+                    <a onclick='saveAndGoTo({{../surveyno}},{{../questno}},"./r/{{@index}}")'>
+                        <div class="questitem">
+                            <div class="typcn icon typcn-{{icon}}"></div>
+                            <b>{{quest}}</b><br /><a>{{type}}</a>
+                        </div>
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+        <button onclick="sendData('{{surveyno}}', '{{username}}', '{{questno}}')" id="donebut" class="completebut">
+            <a id="buticon" class="typcn buticon typcn-lock-closed"></a></button>
+        <div id="buttxt" class="butsub">Complete all the questions to submit</div>
+    </nav>
+    <main class="surveycontent">
+        <table style="width: 100%; height: 100%;">
+            <thead>
+                <tr>
+                    <th colspan="2" class="currentsurvey">
+                        You are currently taking:<br />
+                        <b>{{testName}}</b>
+                    </th>
+                    <th class="phv10">
+                    </th>
+                    <th colspan="2" class="phv10">
+                        <div class="usercontrol">
+                            <b>{{name}}</b><br />
+                            <a>{{username}}</a><br /> <!-- cut values to ... after 20 -->
+                            <a href="/logout">Log Out</a>
+                        </div>
+                        <div class="usericon">
+                            <img src="{{host}}/images/placeholder.png" class="usericonleft" alt="User icon">
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="{{#if isembed}}height: calc(10vw + 20vh){{else}}height: 0{{/if}}">
+                    <!-- 0/calc(10vw + 20vh); without/with embed -->
+                    <!-- ph should be 10 when no embed -->
+                    <td class="pw"></td>
+                    <td></td>
+                    <td>
+                        <div class="embed">
+                            {{#if isyoutube}}
+                                <iframe class="embed" width="80%" height="100%" src="{{youtube}}"
+                                    allowfullscreen></iframe>
+                            {{/if}}
+                            {{#if isimage}}
+                                <img class="embedimg" src="{{image}}">
+                            {{/if}}
+                        </div>
+                    </td>
+                    <td></td>
+                    <td class="pw"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3" style="text-align: center; vertical-align: middle; padding-top: 5vh;">
+                        <h3>Question {{questno}}/{{totalquests}}</h3>
+                        <h1>{{question}}</h1>
+                        <form onsubmit='return saveAndGoTo({{surveyno}},{{questno}},{{nextquest}})'>
+                            <input type="submit" style="display: none;" />
+                            {{#if scresp}}
+                                <div class="form__group field">
+                                    <input type="input" class="form__field" placeholder="Answer" name="ans1" id='ans1'
+                                        required />
+                                    <label for="ans1" class="form__label">Answer</label>
+                                </div>
+                            {{/if}}
+                            {{#if dcresp}}
+                                <div class="form__group field">
+                                    <input type="input" class="form__field" placeholder="Answer" name="ans2" id='ans2'
+                                        required />
+                                    <label for="ans2" class="form__label">Answer</label>
+                                </div>
+                            {{/if}}
+                            {{#if mcresp}}
+                                <div style="padding: 0 15vw">
+                                    <div style="float: left;">
+                                        <label class="radio">
+                                            <input type="radio" name="r" value="2">
+                                            <span>{{choices.[0]}}</span>
+                                        </label>
+                                        {{#if twobutl}}
+                                            <label class="radio">
+                                                <input type="radio" name="r" value="2">
+                                                <span>{{choices.[2]}}</span>
+                                            </label>
+                                        {{/if}}
+                                    </div>
+                                    <div style="float: right;">
+                                        <label class="radio">
+                                            <input type="radio" name="r" value="2">
+                                            <span>{{choices.[1]}}</span>
+                                        </label>
+                                        {{#if twobutr}}
+                                            <label class="radio">
+                                                <input type="radio" name="r" value="2">
+                                                <span>{{choices.[3]}}</span>
+                                            </label>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{#if default}}
+                                <div style="padding: 0 15vw">
+                                    <label class="radio">
+                                        <input type="radio" name="r" value="2">
+                                        <span>Strongly Agree</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="r" value="2">
+                                        <span>Agree</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="r" value="2">
+                                        <span>Neither Agree or Disagree</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="r" value="2">
+                                        <span>Disagree</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="r" value="2">
+                                        <span>Strongly Disagree</span>
+                                    </label>
+                                </div>
+                            {{/if}}
+                        </form>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="pw"></td>
+                    <td class="pw"></td>
+                    <td class="ph"></td>
+                    <td class="pw"></td>
+                    <td class="pw"></td>
+                </tr>
+            </tbody>
+        </table>
+        {{#if islastquest}}
+            <div class="control cleft"><a onclick='saveAndGoTo({{surveyno}},{{questno}},{{lastquest}})'
+                    class="typcn typcn-chevron-left"></a>
+            </div>
+        {{/if}}
+        {{#if isnextquest}}
+            <div class="control cright"><a onclick='saveAndGoTo({{surveyno}},{{questno}},{{nextquest}})'
+                    class="typcn typcn-chevron-right"></a>
+            </div>
+        {{/if}}
+    </main>
+    <script>
+        setQuestionNum('{{questno}}/{{totalquests}}')
+        loadAnswers('{{surveyno}}', '{{questno}}')
+        document.getElementsByClassName('questitem')[({{ questno }}-1)].classList.add('activequest');
+    </script>
+</body>
+
+</html>

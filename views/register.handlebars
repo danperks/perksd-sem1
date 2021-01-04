@@ -1,41 +1,60 @@
-
 <!doctype html>
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Create an Account</title>
-		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
-		<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
-		<script type="module" src="main.js"></script>
-	</head>
-	<body>
-		<header>
-		<h1>Create an Account</h1>
-		<a href="/login">Log in</a>
-		</header>
-		{{#if msg}}
- 			<aside>
-				<p class="msg">{{msg}}</p>
-			</aside>
-		{{/if}}
-		<main>
-		<form action="/register" enctype="multipart/form-data" method="post">
-			<p>
-				<label for="user">Username</label><br />
-				<input type="text" name="user" placeholder="your preferred username (no spaces)" value="{{body.user}}">
-			</p>
-			<p>
-				<label for="pass">Password</label><br />
-				<input type="password" name="pass" placeholder="your chosen password" value="{{body.pass}}">
-			</p>
-			<p>
-				<label for="email">Email</label><br />
-				<input type="email" name="email" placeholder="a valid email address" value="{{body.email}}">
-			</p>
-			<p><input type="submit" value="Create"></p>
-		</form>
-		</main>
-	</body>
+
+<head>
+	<meta charset="utf-8">
+	<title>Results - Northsea</title>
+	<meta name="description" content="Survey page for Northsea survey">
+	<meta name="author" content="Daniel Perks">
+	<link href="{{host}}/reset.css" type="text/css" rel="stylesheet" />
+	<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.9/typicons.min.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap" rel="stylesheet">
+	<script type="application/javascript" src="{{host}}/survey.js"></script>
+	<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+</head>
+
+<body>
+	<nav class="sidenav">
+		<div style="height: 10vh">
+			<a href="/"><img src="{{host}}/images/logowide.png" class="logoleft" alt="Northsea Surveys Logo"></a>
+		</div>
+		<div class="currentsurvey">
+			You are currently viewing responses to:<br />
+			<b>{{testName}}</b>
+		</div>
+		<ul class="questlist" style="height: 75vh;">
+			{{#each questions}}
+				<li>
+					<a>
+						<div class="questitem">
+							<div class="typcn icon typcn-{{icon}}"></div>
+							<b>{{quest}}</b><br /><a>{{type}}</a>
+						</div>
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</nav>
+	<main class="resultcontent">
+		{{#each results}}
+			<section id="result{{@index}}" class="resultbox" {{#if even}} style="background-color: #20202005" {{/if}}>
+				<div style="float: left; padding: 5vh 0 0 3vw; ">
+					<h1>{{question}}</h1>
+					<h5>Most Common: {{common}}</h5>
+					<h5>Unique Answers: {{unique}}</h5>
+				</div>
+				<canvas id="myChart{{@index}}" width="450vw" height="250"
+					style="float: right; padding: 3vh 5vw 3vh 0;"></canvas>
+			</section>
+		{{/each}}
+	</main>
+	<script>
+		makeCharts("{{ occurances }}")
+		connectSidebar()
+	</script>
+</body>
+
 </html>
