@@ -25,7 +25,7 @@
             <b>{{testName}}</b>
         </div>
         {{#if authorised}}
-            <a href="/logout" class="typcn typcn-key" style="line-height: 45px; float:right; font-size: 30px;"></a>
+            <a href="/logout" class="typcn typcn-key"></a>
             <img src="{{host}}/images/placeholder.png" class="usericontop" alt="User icon">
             <div style="float: right; text-align: right; padding-right: 1vw; line-height: 25px">
                 <b>{{name}}</b><br />
@@ -53,9 +53,12 @@
                 zoomControl: false,
             })
 
-            {{#each responselocation}}
-                const marker{{@index}} = new google.maps.Marker({ position: { lat: {{lat}}, lng: {{lon}} }, map: map,})
-            {{/each}}
+            { {#each responselocation } }
+            const marker{{@index
+        }} = new google.maps.Marker({ position: { lat: {{ lat }}, lng: {{ lon }} }, map: map,})
+        {
+            {
+                /each}}
             }
     </script>
 </body>

@@ -2,11 +2,17 @@ import Koa from 'koa'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
+import { openSync, closeSync, existsSync, mkdirSync } from 'fs'
 
 import router from './routes/routes.js'
 
 const app = new Koa()
 app.keys = ['darkSecret']
+
+if (!existsSync('db')) {
+	mkdirSync('db')
+}
+closeSync(openSync('db/northsea.db', 'w'))
 
 const defaultPort = 8080
 const port = process.env.PORT || defaultPort
