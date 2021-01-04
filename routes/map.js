@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-
 import Router from 'koa-router'
 
 const router = new Router({ prefix: '/map' })

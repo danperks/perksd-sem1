@@ -1,7 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable complexity */
-/* eslint-disable max-statements */
-/* eslint-disable max-lines-per-function */
 import Router from 'koa-router'
 import bodyParser from 'koa-body'
 
